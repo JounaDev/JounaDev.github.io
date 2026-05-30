@@ -5,547 +5,614 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#6b21a8">
 <title>Youstin — Sign In</title>
+<script src="https://accounts.google.com/gsi/client"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
-    width: 100vw;
-    min-height: 100vh;
+    width: 100vw; min-height: 100vh;
     overflow: hidden;
     background: #120820;
+    display: flex; align-items: center; justify-content: center;
     -webkit-font-smoothing: antialiased;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
   /* ── FONDO ANIMADO ── */
   .bg {
-    position: fixed;
-    inset: -20%;
+    position: fixed; inset: -20%;
     background:
       radial-gradient(ellipse 90% 80% at 75% 10%,  rgba(107,33,168,0.7)  0%, transparent 65%),
       radial-gradient(ellipse 80% 70% at 15% 40%,  rgba(45,10,78,0.6)    0%, transparent 65%),
       radial-gradient(ellipse 75% 65% at 25% 85%,  rgba(127,29,29,0.55)  0%, transparent 65%),
-      radial-gradient(ellipse 85% 75% at 65% 90%,  rgba(59,7,100,0.65)   0%, transparent 65%),
-      radial-gradient(ellipse 60% 60% at 50% 50%,  rgba(30,5,55,0.4)     0%, transparent 70%);
+      radial-gradient(ellipse 85% 75% at 65% 90%,  rgba(59,7,100,0.65)   0%, transparent 65%);
     background-color: #120820;
     filter: blur(45px);
     animation: rotateBg 14s linear infinite;
-    transform-origin: center center;
     transform: scale(1.4);
   }
-
   .bg2 {
-    position: fixed;
-    inset: -20%;
+    position: fixed; inset: -20%;
     background:
       radial-gradient(ellipse 70% 60% at 30% 20%,  rgba(147,51,234,0.3)  0%, transparent 68%),
       radial-gradient(ellipse 65% 55% at 70% 65%,  rgba(127,29,29,0.25)  0%, transparent 68%),
       radial-gradient(ellipse 75% 65% at 50% 95%,  rgba(88,28,135,0.35)  0%, transparent 68%);
     filter: blur(60px);
     animation: rotateBg 20s linear infinite reverse;
-    transform-origin: center center;
     transform: scale(1.4);
   }
-
   .overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(8, 2, 18, 0.45);
+    position: fixed; inset: 0;
+    background: rgba(8,2,18,0.45);
   }
-
   @keyframes rotateBg {
     from { transform: rotate(0deg) scale(1.4); }
     to   { transform: rotate(360deg) scale(1.4); }
   }
 
-  /* ── LOGIN CARD ── */
-  .login-wrapper {
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    max-width: 380px;
-    padding: 0 20px;
-    opacity: 0;
-    animation: floatIn 0.8s cubic-bezier(0.25, 1, 0.5, 1) 0.2s forwards;
+  /* ── PARTÍCULAS ── */
+  #particles { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+
+  /* ── GRID LINES ── */
+  .grid-lines {
+    position: fixed; inset: 0; z-index: 1; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(151,71,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(151,71,255,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
   }
 
+  /* ── AURORA TOP ── */
+  .aurora {
+    position: fixed; top: -60px; left: 0; right: 0;
+    height: 200px; z-index: 2; pointer-events: none;
+    background: linear-gradient(180deg,
+      rgba(107,33,168,0.25) 0%,
+      rgba(147,51,234,0.1) 40%,
+      transparent 100%);
+    filter: blur(20px);
+    animation: auroraShift 8s ease-in-out infinite alternate;
+  }
+  @keyframes auroraShift {
+    from { opacity: 0.6; transform: scaleX(1); }
+    to   { opacity: 1;   transform: scaleX(1.05); }
+  }
+
+  /* ── LOGIN WRAPPER ── */
+  .login-wrapper {
+    position: relative; z-index: 10;
+    width: 100%; max-width: 390px;
+    padding: 0 20px;
+    opacity: 0;
+    animation: floatIn 0.9s cubic-bezier(0.25,1,0.5,1) 0.3s forwards;
+  }
   @keyframes floatIn {
-    from { opacity: 0; transform: translateY(28px) scale(0.97); }
+    from { opacity: 0; transform: translateY(32px) scale(0.96); }
     to   { opacity: 1; transform: translateY(0) scale(1); }
   }
 
+  /* ── CARD ── */
   .card {
-    background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 26px;
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    padding: 40px 36px 36px;
-    position: relative;
-    overflow: hidden;
+    background: rgba(255,255,255,0.065);
+    border: 1px solid rgba(255,255,255,0.13);
+    border-radius: 28px;
+    backdrop-filter: blur(36px);
+    -webkit-backdrop-filter: blur(36px);
+    padding: 42px 38px 38px;
+    position: relative; overflow: hidden;
     box-shadow:
-      0 32px 80px rgba(0,0,0,0.5),
-      0 0 0 0.5px rgba(255,255,255,0.08) inset;
+      0 40px 100px rgba(0,0,0,0.55),
+      0 0 0 0.5px rgba(255,255,255,0.07) inset,
+      0 0 60px rgba(107,33,168,0.1);
   }
-
-  /* Línea superior tipo Apple */
   .card::before {
     content: '';
-    position: absolute;
-    top: 0; left: 20%; right: 20%;
+    position: absolute; top: 0; left: 15%; right: 15%;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.35), transparent);
+    background: linear-gradient(90deg, transparent, rgba(200,150,255,0.5), transparent);
   }
 
-  /* ── LOGO / AVATAR ── */
+  /* Glow corner */
+  .card::after {
+    content: '';
+    position: absolute; top: -40px; right: -40px;
+    width: 120px; height: 120px;
+    background: radial-gradient(circle, rgba(147,51,234,0.2) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  /* ── LOGO ── */
   .logo-wrap {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 28px;
+    display: flex; justify-content: center;
+    margin-bottom: 26px;
+    position: relative;
+  }
+
+  .logo-ring {
+    position: absolute;
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    border: 1px solid rgba(151,71,255,0.2);
+    animation: ringPulse 3s ease-in-out infinite;
+  }
+  .logo-ring2 {
+    position: absolute;
+    width: 110px; height: 110px;
+    border-radius: 50%;
+    border: 1px solid rgba(151,71,255,0.1);
+    animation: ringPulse 3s ease-in-out infinite 0.5s;
+  }
+  @keyframes ringPulse {
+    0%,100% { transform: scale(1); opacity: 0.5; }
+    50%      { transform: scale(1.05); opacity: 1; }
   }
 
   .logo {
-    width: 62px; height: 62px;
-    border-radius: 16px;
-    background: linear-gradient(145deg, rgba(107,33,168,0.6), rgba(59,7,100,0.8));
-    border: 1px solid rgba(255,255,255,0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 26px;
-    font-weight: 700;
-    color: #ffffff;
+    width: 66px; height: 66px;
+    border-radius: 18px;
+    background: linear-gradient(145deg, rgba(124,58,237,0.7), rgba(107,33,168,0.9));
+    border: 1px solid rgba(255,255,255,0.18);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; font-weight: 700; color: #fff;
     letter-spacing: -1px;
-    box-shadow: 0 8px 24px rgba(107,33,168,0.4);
-    position: relative;
+    box-shadow:
+      0 8px 28px rgba(107,33,168,0.5),
+      0 0 0 4px rgba(107,33,168,0.15);
+    position: relative; z-index: 1;
+    animation: logoBob 4s ease-in-out infinite;
   }
-
+  @keyframes logoBob {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-4px); }
+  }
   .logo::after {
     content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: 16px;
-    background: linear-gradient(145deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+    position: absolute; inset: 0;
+    border-radius: 18px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.18) 0%, transparent 55%);
   }
 
-  /* ── TITULOS ── */
+  /* ── TÍTULOS ── */
   .card-title {
     text-align: center;
-    font-size: 22px;
-    font-weight: 700;
-    color: #f2f2f7;
-    letter-spacing: -0.4px;
-    margin-bottom: 6px;
+    font-size: 22px; font-weight: 700;
+    color: #f2f2f7; letter-spacing: -0.4px;
+    margin-bottom: 5px;
   }
-
   .card-sub {
     text-align: center;
-    font-size: 13px;
-    color: rgba(242,242,247,0.45);
-    margin-bottom: 32px;
-    letter-spacing: 0.01em;
+    font-size: 13px; color: rgba(242,242,247,0.4);
+    margin-bottom: 30px;
   }
 
   /* ── INPUTS ── */
-  .input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 20px;
-  }
+  .input-group { display: flex; flex-direction: column; gap: 11px; margin-bottom: 18px; }
 
-  .input-field {
-    position: relative;
-  }
+  .input-field { position: relative; }
 
   .input-field input {
-    width: 100%;
-    height: 50px;
-    background: rgba(255,255,255,0.07);
+    width: 100%; height: 50px;
+    background: rgba(255,255,255,0.06);
     border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 13px;
+    border-radius: 14px;
     padding: 0 16px 0 44px;
-    font-size: 15px;
-    color: #f2f2f7;
-    font-family: inherit;
-    outline: none;
+    font-size: 15px; color: #f2f2f7;
+    font-family: inherit; outline: none;
     transition: all 0.25s ease;
     -webkit-appearance: none;
   }
-
-  .input-field input::placeholder {
-    color: rgba(242,242,247,0.3);
-  }
-
+  .input-field input::placeholder { color: rgba(242,242,247,0.28); }
   .input-field input:focus {
-    background: rgba(255,255,255,0.1);
-    border-color: rgba(151,71,255,0.6);
-    box-shadow: 0 0 0 3px rgba(107,33,168,0.25);
+    background: rgba(255,255,255,0.09);
+    border-color: rgba(151,71,255,0.55);
+    box-shadow: 0 0 0 3px rgba(107,33,168,0.22), 0 0 20px rgba(107,33,168,0.1);
   }
 
   .input-icon {
-    position: absolute;
-    left: 14px;
-    top: 50%;
+    position: absolute; left: 14px; top: 50%;
     transform: translateY(-50%);
-    font-size: 16px;
-    pointer-events: none;
-    opacity: 0.5;
+    font-size: 16px; pointer-events: none; opacity: 0.45;
   }
-
-  .input-field input:focus ~ .input-focus-ring {
-    opacity: 1;
-  }
-
-  /* Toggle password */
   .toggle-pw {
-    position: absolute;
-    right: 14px;
-    top: 50%;
+    position: absolute; right: 12px; top: 50%;
     transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 15px;
-    opacity: 0.4;
-    transition: opacity 0.2s;
-    padding: 4px;
-    color: white;
+    background: none; border: none; cursor: pointer;
+    font-size: 15px; opacity: 0.4; transition: opacity 0.2s;
+    padding: 4px; color: white;
   }
-
   .toggle-pw:hover { opacity: 0.8; }
 
-  /* ── OPCIONES ── */
+  /* ── OPTIONS ROW ── */
   .options-row {
-    display: flex;
-    align-items: center;
+    display: flex; align-items: center;
     justify-content: space-between;
-    margin-bottom: 24px;
+    margin-bottom: 22px;
   }
-
-  .remember {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-  }
-
+  .remember { display: flex; align-items: center; gap: 8px; cursor: pointer; }
   .toggle {
     width: 36px; height: 21px;
     background: rgba(255,255,255,0.12);
-    border-radius: 100px;
-    position: relative;
+    border-radius: 100px; position: relative;
     transition: background 0.25s ease;
     border: 1px solid rgba(255,255,255,0.08);
   }
-
   .toggle-knob {
-    position: absolute;
-    top: 2px; left: 2px;
+    position: absolute; top: 2px; left: 2px;
     width: 15px; height: 15px;
-    background: #ffffff;
-    border-radius: 50%;
+    background: #fff; border-radius: 50%;
     transition: transform 0.25s cubic-bezier(0.25,1,0.5,1);
     box-shadow: 0 1px 4px rgba(0,0,0,0.4);
   }
-
   #remember-cb { display: none; }
-
-  #remember-cb:checked + .remember .toggle {
-    background: #9747ff;
-    border-color: rgba(151,71,255,0.4);
-  }
-
-  #remember-cb:checked + .remember .toggle-knob {
-    transform: translateX(15px);
-  }
-
-  .remember-label {
-    font-size: 13px;
-    color: rgba(242,242,247,0.55);
-    user-select: none;
-  }
-
+  #remember-cb:checked + .remember .toggle { background: #9747ff; }
+  #remember-cb:checked + .remember .toggle-knob { transform: translateX(15px); }
+  .remember-label { font-size: 13px; color: rgba(242,242,247,0.5); user-select: none; }
   .forgot {
-    font-size: 13px;
-    color: rgba(151,71,255,0.9);
-    text-decoration: none;
-    font-weight: 500;
+    font-size: 13px; color: rgba(180,120,255,0.9);
+    text-decoration: none; font-weight: 500;
     transition: color 0.2s;
   }
-
   .forgot:hover { color: #bf5af2; }
 
-  /* ── BTN PRINCIPAL ── */
-  .btn-main {
-    width: 100%;
-    height: 52px;
-    background: linear-gradient(145deg, #7c3aed, #6b21a8);
-    border: none;
-    border-radius: 14px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #ffffff;
-    font-family: inherit;
-    cursor: pointer;
-    letter-spacing: 0.01em;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.25s ease;
-    box-shadow: 0 8px 24px rgba(107,33,168,0.4);
-    margin-bottom: 14px;
-  }
-
-  .btn-main::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 50%;
-    background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 100%);
-    border-radius: 14px 14px 0 0;
-  }
-
-  .btn-main:hover {
-    transform: translateY(-1px) scale(1.01);
-    box-shadow: 0 12px 32px rgba(107,33,168,0.55);
-  }
-
-  .btn-main:active {
-    transform: scale(0.98);
-    box-shadow: 0 4px 12px rgba(107,33,168,0.3);
-  }
-
-  /* ── DIVIDER ── */
-  .divider {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 14px;
-  }
-
-  .divider-line {
-    flex: 1;
-    height: 1px;
-    background: rgba(255,255,255,0.08);
-  }
-
-  .divider-text {
-    font-size: 11px;
-    color: rgba(242,242,247,0.3);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  /* ── BTN SECUNDARIO (Face ID / Biometrics) ── */
-  .btn-alt {
-    width: 100%;
-    height: 46px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 13px;
-    font-size: 14px;
-    font-weight: 500;
-    color: rgba(242,242,247,0.75);
-    font-family: inherit;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: all 0.2s ease;
-    margin-bottom: 28px;
-  }
-
-  .btn-alt:hover {
-    background: rgba(255,255,255,0.09);
-    border-color: rgba(151,71,255,0.3);
-    color: #f2f2f7;
-  }
-
-  /* ── FOOTER CARD ── */
-  .card-footer {
-    text-align: center;
-    font-size: 13px;
-    color: rgba(242,242,247,0.35);
-  }
-
-  .card-footer a {
-    color: rgba(151,71,255,0.9);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.2s;
-  }
-
-  .card-footer a:hover { color: #bf5af2; }
-
-  /* ── SEPARADOR DE PÁGINA ── */
-  .page-label {
-    text-align: center;
-    margin-top: 24px;
-    font-size: 11px;
-    color: rgba(242,242,247,0.2);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  /* ── LINK al CV ── */
-  .cv-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    margin-top: 10px;
-    font-size: 12px;
-    color: rgba(151,71,255,0.7);
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  .cv-link:hover { color: #bf5af2; }
-
-  /* ── ERROR STATE ── */
+  /* ── ERROR ── */
   .error-msg {
     display: none;
     background: rgba(255,69,58,0.1);
     border: 1px solid rgba(255,69,58,0.25);
-    border-radius: 10px;
-    padding: 10px 14px;
-    font-size: 12px;
-    color: #ff6b63;
-    margin-bottom: 14px;
-    text-align: center;
+    border-radius: 10px; padding: 10px 14px;
+    font-size: 12px; color: #ff6b63;
+    margin-bottom: 14px; text-align: center;
+    animation: shake 0.35s ease;
+  }
+  .error-msg.show { display: block; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25%      { transform: translateX(-6px); }
+    75%      { transform: translateX(6px); }
   }
 
-  .error-msg.show { display: block; }
+  /* ── BTN PRINCIPAL ── */
+  .btn-main {
+    width: 100%; height: 52px;
+    background: linear-gradient(145deg, #7c3aed, #6b21a8);
+    border: none; border-radius: 14px;
+    font-size: 16px; font-weight: 600;
+    color: #fff; font-family: inherit;
+    cursor: pointer; letter-spacing: 0.01em;
+    position: relative; overflow: hidden;
+    transition: all 0.25s ease;
+    box-shadow: 0 8px 28px rgba(107,33,168,0.45);
+    margin-bottom: 14px;
+  }
+  .btn-main::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.13) 0%, transparent 100%);
+    border-radius: 14px 14px 0 0;
+  }
+  /* Shimmer */
+  .btn-main::after {
+    content: '';
+    position: absolute; top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.5s ease;
+  }
+  .btn-main:hover::after { left: 160%; }
+  .btn-main:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 36px rgba(107,33,168,0.6);
+  }
+  .btn-main:active { transform: scale(0.98); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    display: flex; align-items: center;
+    gap: 12px; margin-bottom: 14px;
+  }
+  .divider-line { flex: 1; height: 1px; background: rgba(255,255,255,0.08); }
+  .divider-text {
+    font-size: 11px; color: rgba(242,242,247,0.28);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+
+  /* ── GOOGLE BTN ── */
+  .btn-google {
+    width: 100%; height: 50px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.13);
+    border-radius: 14px;
+    font-size: 14px; font-weight: 500;
+    color: rgba(242,242,247,0.85);
+    font-family: inherit; cursor: pointer;
+    display: flex; align-items: center;
+    justify-content: center; gap: 10px;
+    transition: all 0.25s ease;
+    margin-bottom: 14px;
+    position: relative; overflow: hidden;
+  }
+  .btn-google::after {
+    content: '';
+    position: absolute; top: 0; left: -100%;
+    width: 60%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.5s ease;
+  }
+  .btn-google:hover::after { left: 160%; }
+  .btn-google:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.22);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  }
+  .btn-google:active { transform: scale(0.98); }
+
+  .google-icon {
+    width: 20px; height: 20px; flex-shrink: 0;
+  }
+
+  /* ── BTN FACE ID ── */
+  .btn-alt {
+    width: 100%; height: 46px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 13px;
+    font-size: 13px; font-weight: 400;
+    color: rgba(242,242,247,0.5);
+    font-family: inherit; cursor: pointer;
+    display: flex; align-items: center;
+    justify-content: center; gap: 8px;
+    transition: all 0.2s ease;
+    margin-bottom: 26px;
+  }
+  .btn-alt:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(151,71,255,0.25);
+    color: rgba(242,242,247,0.75);
+  }
+
+  /* ── FOOTER ── */
+  .card-footer {
+    text-align: center;
+    font-size: 13px; color: rgba(242,242,247,0.3);
+  }
+  .card-footer a {
+    color: rgba(180,120,255,0.9); text-decoration: none;
+    font-weight: 500; transition: color 0.2s;
+  }
+  .card-footer a:hover { color: #bf5af2; }
+
+  .page-label {
+    text-align: center; margin-top: 22px;
+    font-size: 11px; color: rgba(242,242,247,0.18);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .cv-link {
+    display: flex; align-items: center;
+    justify-content: center; gap: 6px;
+    margin-top: 8px; font-size: 12px;
+    color: rgba(151,71,255,0.6); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .cv-link:hover { color: #bf5af2; }
+
+  /* ── SUCCESS STATE ── */
+  .success-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(8,2,18,0);
+    pointer-events: none;
+    transition: background 0.6s ease;
+  }
+  .success-overlay.show {
+    background: rgba(8,2,18,0.7);
+    pointer-events: all;
+  }
+  .success-icon {
+    width: 80px; height: 80px; border-radius: 24px;
+    background: linear-gradient(145deg, #30d158, #25a244);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    box-shadow: 0 0 60px rgba(48,209,88,0.5);
+    transform: scale(0);
+    transition: transform 0.5s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  .success-overlay.show .success-icon { transform: scale(1); }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-thumb { background: rgba(151,71,255,0.3); border-radius: 2px; }
 </style>
 </head>
+<body>
+
+<!-- FONDO -->
+<div class="bg"></div>
+<div class="bg2"></div>
+<div class="overlay"></div>
+<div class="grid-lines"></div>
+<div class="aurora"></div>
+<canvas id="particles"></canvas>
+
+<!-- SUCCESS OVERLAY -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-icon">✓</div>
+</div>
+
+<!-- LOGIN -->
+<div class="login-wrapper">
+  <div class="card">
+
+    <div class="logo-wrap">
+      <div class="logo-ring2"></div>
+      <div class="logo-ring"></div>
+      <div class="logo">Y</div>
+    </div>
+
+    <div class="card-title">Bienvenido de nuevo</div>
+    <div class="card-sub">Inicia sesión en tu perfil</div>
+
+    <div class="error-msg" id="errorMsg">Usuario o contraseña incorrectos</div>
+
+    <div class="input-group">
+      <div class="input-field">
+        <span class="input-icon">✉️</span>
+        <input type="text" id="username" placeholder="Usuario o correo" autocomplete="username">
+      </div>
+      <div class="input-field">
+        <span class="input-icon">🔒</span>
+        <input type="password" id="password" placeholder="Contraseña" autocomplete="current-password">
+        <button class="toggle-pw" type="button" id="togglePw">👁</button>
+      </div>
+    </div>
+
+    <div class="options-row">
+      <input type="checkbox" id="remember-cb">
+      <label for="remember-cb" class="remember">
+        <div class="toggle"><div class="toggle-knob"></div></div>
+        <span class="remember-label">Recordarme</span>
+      </label>
+      <a href="#" class="forgot">¿Olvidaste tu contraseña?</a>
+    </div>
+
+    <button class="btn-main" id="loginBtn">Iniciar sesión</button>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <span class="divider-text">o continúa con</span>
+      <div class="divider-line"></div>
+    </div>
+
+    <!-- GOOGLE BUTTON -->
+    <button class="btn-google" id="googleBtn">
+      <svg class="google-icon" viewBox="0 0 24 24">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
+      Continuar con Google
+    </button>
+
+    <button class="btn-alt">🔐 Face ID / Touch ID</button>
+
+    <div class="card-footer">
+      ¿No tienes cuenta? <a href="#">Crear perfil</a>
+    </div>
+
+  </div>
+
+  <div class="page-label">System Profile · Youstin · 2025</div>
+  <a class="cv-link" href="youstin_cv_apple.html">← Ver CV completo</a>
+</div>
+
+<!-- AUDIO -->
 <audio id="bgMusic" loop>
   <source src="083 - Bruno Mars - Talking to the Moon.mp3" type="audio/mpeg">
 </audio>
-<body>
-
-  <!-- FONDO ANIMADO -->
-  <div class="bg"></div>
-  <div class="bg2"></div>
-  <div class="overlay"></div>
-
-  <!-- LOGIN CARD -->
-  <div class="login-wrapper">
-    <div class="card">
-
-      <!-- Logo -->
-      <div class="logo-wrap">
-        <div class="logo">Y</div>
-      </div>
-
-      <div class="card-title">Bienvenido de nuevo</div>
-      <div class="card-sub">Inicia sesión en tu perfil</div>
-
-      <!-- Error -->
-      <div class="error-msg" id="errorMsg">Usuario o contraseña incorrectos</div>
-
-      <!-- Inputs -->
-      <div class="input-group">
-        <div class="input-field">
-          <span class="input-icon">✉️</span>
-          <input type="text" id="username" placeholder="Usuario o correo" autocomplete="username">
-        </div>
-        <div class="input-field">
-          <span class="input-icon">🔒</span>
-          <input type="password" id="password" placeholder="Contraseña" autocomplete="current-password">
-          <button class="toggle-pw" type="button" id="togglePw">👁</button>
-        </div>
-      </div>
-
-      <!-- Opciones -->
-      <div class="options-row">
-        <input type="checkbox" id="remember-cb">
-        <label for="remember-cb" class="remember">
-          <div class="toggle"><div class="toggle-knob"></div></div>
-          <span class="remember-label">Recordarme</span>
-        </label>
-        <a href="#" class="forgot">¿Olvidaste tu contraseña?</a>
-      </div>
-
-      <!-- Botón principal -->
-      <button class="btn-main" id="loginBtn">Iniciar sesión</button>
-
-      <!-- Divider -->
-      <div class="divider">
-        <div class="divider-line"></div>
-        <span class="divider-text">o continúa con</span>
-        <div class="divider-line"></div>
-      </div>
-
-      <!-- Face ID / Biométrico -->
-      <button class="btn-alt">
-        <span>🔐</span> Face ID / Touch ID
-      </button>
-
-      <!-- Footer -->
-      <div class="card-footer">
-        ¿No tienes cuenta? <a href="#">Crear perfil</a>
-      </div>
-
-    </div>
-
-    <div class="page-label">System Profile · Youstin · 2025</div>
-    <a class="cv-link" href="youstin_cv_apple.html">← Ver CV completo</a>
-  </div>
 
 <script>
-  const audio   = document.getElementById('bgMusic');
-const ctx     = new (window.AudioContext || window.webkitAudioContext)();
-const source  = ctx.createMediaElementSource(audio);
+  /* ── PARTÍCULAS ── */
+  const canvas = document.getElementById('particles');
+  const ctx    = canvas.getContext('2d');
 
-// — VOLUMEN —
-const gainNode = ctx.createGain();
-gainNode.gain.value = 0.35; // 0.0 silencio → 1.0 full (ajusta aquí)
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
 
-// — ECO (Delay + Feedback) —
-const delay       = ctx.createDelay();
-const feedback    = ctx.createGain();
-const dryGain     = ctx.createGain();
-const wetGain     = ctx.createGain();
-
-delay.delayTime.value = 0.35;   // segundos entre ecos (0.2 sutil → 0.6 profundo)
-feedback.gain.value   = 0.35;  // cuánto se repite (0.1 poco → 0.6 mucho)
-dryGain.gain.value    = 1.0;   // señal original
-wetGain.gain.value    = 0.2;  // mezcla del eco (0.2 sutil → 0.7 fuerte)
-
-// Cadena: source → dry → gain → destino
-//                  ↘ delay → feedback ↗ (loop)
-//                           ↘ wet → gain → destino
-source.connect(dryGain);
-source.connect(delay);
-delay.connect(feedback);
-feedback.connect(delay);       // loop del feedback
-delay.connect(wetGain);
-
-dryGain.connect(gainNode);
-wetGain.connect(gainNode);
-gainNode.connect(ctx.destination);
-
-// Iniciar al primer click (política del navegador)
-document.addEventListener('click', () => {
-  if (ctx.state === 'suspended') ctx.resume();
-  audio.play();
-}, { once: true });
-
-  // Toggle password visibility
-  const togglePw = document.getElementById('togglePw');
-  const pwInput  = document.getElementById('password');
-
-  togglePw.addEventListener('click', () => {
-    const isText = pwInput.type === 'text';
-    pwInput.type = isText ? 'password' : 'text';
-    togglePw.textContent = isText ? '👁' : '🙈';
+  window.addEventListener('resize', () => {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
   });
 
-  // Login demo (simulated)
+  const particles = Array.from({ length: 55 }, () => ({
+    x:    Math.random() * canvas.width,
+    y:    Math.random() * canvas.height,
+    r:    Math.random() * 1.6 + 0.4,
+    vx:   (Math.random() - 0.5) * 0.3,
+    vy:   (Math.random() - 0.5) * 0.3,
+    alpha: Math.random() * 0.5 + 0.1,
+    color: Math.random() > 0.5 ? '151,71,255' : '200,150,255'
+  }));
+
+  function drawParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => {
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.color},${p.alpha})`;
+      ctx.fill();
+
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width)  p.x = 0;
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+    });
+    requestAnimationFrame(drawParticles);
+  }
+  drawParticles();
+
+  /* ── AUDIO + WEB AUDIO API ── */
+  const audioEl  = document.getElementById('bgMusic');
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const source   = audioCtx.createMediaElementSource(audioEl);
+
+  const gainNode   = audioCtx.createGain();
+  gainNode.gain.value = 0.35;
+
+  const delay    = audioCtx.createDelay();
+  const feedback = audioCtx.createGain();
+  const dryGain  = audioCtx.createGain();
+  const wetGain  = audioCtx.createGain();
+
+  delay.delayTime.value = 0.4;
+  feedback.gain.value   = 0.35;
+  dryGain.gain.value    = 1.0;
+  wetGain.gain.value    = 0.45;
+
+  source.connect(dryGain);
+  source.connect(delay);
+  delay.connect(feedback);
+  feedback.connect(delay);
+  delay.connect(wetGain);
+  dryGain.connect(gainNode);
+  wetGain.connect(gainNode);
+  gainNode.connect(audioCtx.destination);
+
+  document.addEventListener('click', () => {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    audioEl.play().catch(() => {});
+  }, { once: true });
+
+  /* ── FUNCIÓN DE FADE Y REDIRECT ── */
+  function doLogin() {
+    const overlay = document.getElementById('successOverlay');
+    overlay.classList.add('show');
+
+    // Fade suave con exponentialRamp
+    const fadeDuration = 1.8;
+    gainNode.gain.setValueAtTime(gainNode.gain.value, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + fadeDuration);
+
+    setTimeout(() => {
+      window.location.href = 'youstin_cv_apple.html';
+    }, 1600);
+  }
+
+  /* ── LOGIN CON USUARIO/CONTRASEÑA ── */
+  document.getElementById('togglePw').addEventListener('click', () => {
+    const pw = document.getElementById('password');
+    const isText = pw.type === 'text';
+    pw.type = isText ? 'password' : 'text';
+    document.getElementById('togglePw').textContent = isText ? '👁' : '🙈';
+  });
+
   document.getElementById('loginBtn').addEventListener('click', () => {
     const user = document.getElementById('username').value.trim();
     const pw   = document.getElementById('password').value;
@@ -553,37 +620,60 @@ document.addEventListener('click', () => {
 
     if (!user || !pw) {
       err.textContent = 'Por favor completa todos los campos.';
+      err.classList.remove('show');
+      void err.offsetWidth;
       err.classList.add('show');
       return;
     }
-if (user === 'youstin' && pw === '1234') {
-  document.getElementById('loginBtn').textContent = '✓ Acceso concedido';
-  document.getElementById('loginBtn').style.background = 'linear-gradient(145deg,#30d158,#25a244)';
-  err.classList.remove('show');
 
-  // Fade out de la música
-  const music = document.getElementById('bgMusic');
-  const fade = setInterval(() => {
-    if (music.volume > 0.05) {
-      music.volume -= 0.05;
+    if (user === 'youstin' && pw === '1234') {
+      const btn = document.getElementById('loginBtn');
+      btn.textContent = '✓ Acceso concedido';
+      btn.style.background = 'linear-gradient(145deg,#30d158,#25a244)';
+      btn.style.boxShadow  = '0 8px 28px rgba(48,209,88,0.45)';
+      err.classList.remove('show');
+      doLogin();
     } else {
-      music.volume = 0;
-      clearInterval(fade);
+      err.textContent = 'Usuario o contraseña incorrectos.';
+      err.classList.remove('show');
+      void err.offsetWidth;
+      err.classList.add('show');
     }
-  }, 80);
-
-  setTimeout(() => {
-    window.location.href = 'youstin_cv_apple.html';
-  }, 1400);
-}
-////
-  
   });
 
-  // Enter key
   document.addEventListener('keydown', e => {
     if (e.key === 'Enter') document.getElementById('loginBtn').click();
   });
+
+  /* ── GOOGLE SIGN IN ── */
+/* ── GOOGLE SIGN IN ── */
+function initGoogle() {
+  if (typeof google === 'undefined') {
+    setTimeout(initGoogle, 200);
+    return;
+  }
+  google.accounts.id.initialize({
+    client_id: '683471371884-252k52v17nqa568kn1a6r4tkqlth5sr5.apps.googleusercontent.com',
+    callback: (response) => {
+      const payload = JSON.parse(atob(response.credential.split('.')[1]));
+      const btn = document.getElementById('loginBtn');
+      btn.textContent = `✓ Hola, ${payload.given_name}`;
+      btn.style.background = 'linear-gradient(145deg,#30d158,#25a244)';
+      btn.style.boxShadow  = '0 8px 28px rgba(48,209,88,0.45)';
+      doLogin();
+    }
+  });
+}
+
+window.addEventListener('load', initGoogle);
+
+document.getElementById('googleBtn').addEventListener('click', () => {
+  if (typeof google !== 'undefined') {
+    google.accounts.id.prompt();
+  } else {
+    console.warn('Google aún no cargó, intenta de nuevo.');
+  }
+});
 </script>
 
 </body>
