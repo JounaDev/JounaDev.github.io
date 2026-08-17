@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#6b21a8">
+<meta name="theme-color" content="#ff4d00">
 <title>Youstin — Sign In</title>
 <script src="https://accounts.google.com/gsi/client"></script>
 <style>
@@ -13,70 +13,97 @@
     font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
     width: 100vw; min-height: 100vh;
     overflow: hidden;
-    background: #120820;
+    background: #070707;
     display: flex; align-items: center; justify-content: center;
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ── FONDO ANIMADO ── */
+  /* =========================================================
+     FONDO — IMAGEN + ROJO / NARANJA / AMARILLO
+     Cambia "fondo.jpg" por el nombre real de tu imagen.
+     ========================================================= */
+
   .bg {
-    position: fixed; inset: -20%;
+    position: fixed;
+    inset: -8%;
+    z-index: 0;
     background:
-      radial-gradient(ellipse 90% 80% at 75% 10%,  rgba(107,33,168,0.7)  0%, transparent 65%),
-      radial-gradient(ellipse 80% 70% at 15% 40%,  rgba(45,10,78,0.6)    0%, transparent 65%),
-      radial-gradient(ellipse 75% 65% at 25% 85%,  rgba(127,29,29,0.55)  0%, transparent 65%),
-      radial-gradient(ellipse 85% 75% at 65% 90%,  rgba(59,7,100,0.65)   0%, transparent 65%);
-    background-color: #120820;
-    filter: blur(45px);
-    animation: rotateBg 14s linear infinite;
-    transform: scale(1.4);
+      linear-gradient(
+        115deg,
+        rgba(0,0,0,.58) 0%,
+        rgba(20,5,0,.30) 38%,
+        rgba(255,58,0,.12) 68%,
+        rgba(255,174,0,.08) 100%
+      ),
+      url("fondo.jpg") center center / cover no-repeat;
+    transform: scale(1.08);
+    filter: saturate(1.15) contrast(1.08);
+    animation: cinematicZoom 18s ease-in-out infinite alternate;
   }
+
   .bg2 {
-    position: fixed; inset: -20%;
+    position: fixed;
+    inset: -12%;
+    z-index: 0;
+    pointer-events: none;
     background:
-      radial-gradient(ellipse 70% 60% at 30% 20%,  rgba(147,51,234,0.3)  0%, transparent 68%),
-      radial-gradient(ellipse 65% 55% at 70% 65%,  rgba(127,29,29,0.25)  0%, transparent 68%),
-      radial-gradient(ellipse 75% 65% at 50% 95%,  rgba(88,28,135,0.35)  0%, transparent 68%);
-    filter: blur(60px);
-    animation: rotateBg 20s linear infinite reverse;
-    transform: scale(1.4);
+      radial-gradient(circle at 15% 78%, rgba(255, 38, 0, .32), transparent 28%),
+      radial-gradient(circle at 82% 72%, rgba(255, 105, 0, .25), transparent 26%),
+      radial-gradient(circle at 52% 8%, rgba(255, 196, 0, .18), transparent 25%);
+    mix-blend-mode: screen;
+    filter: blur(55px);
+    animation: fireDrift 11s ease-in-out infinite alternate;
   }
+
   .overlay {
-    position: fixed; inset: 0;
-    background: rgba(8,2,18,0.45);
-  }
-  @keyframes rotateBg {
-    from { transform: rotate(0deg) scale(1.4); }
-    to   { transform: rotate(360deg) scale(1.4); }
-  }
-
-  /* ── PARTÍCULAS ── */
-  #particles { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
-
-  /* ── GRID LINES ── */
-  .grid-lines {
-    position: fixed; inset: 0; z-index: 1; pointer-events: none;
-    background-image:
-      linear-gradient(rgba(151,71,255,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(151,71,255,0.04) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at center, transparent 15%, rgba(0,0,0,.18) 55%, rgba(0,0,0,.72) 100%),
+      linear-gradient(180deg, rgba(0,0,0,.32), rgba(0,0,0,.12) 45%, rgba(0,0,0,.52));
   }
 
-  /* ── AURORA TOP ── */
+  @keyframes cinematicZoom {
+    from { transform: scale(1.08); }
+    to   { transform: scale(1.14); }
+  }
+
+  @keyframes fireDrift {
+    from { transform: translate3d(-2%, 1%, 0) scale(1); opacity: .72; }
+    to   { transform: translate3d(2%, -2%, 0) scale(1.08); opacity: 1; }
+  }
+
+  /* SIN CUADRÍCULA: eliminada deliberadamente */
+
+  #particles {
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    mix-blend-mode: screen;
+  }
+
+  /* Atmósfera cálida superior */
   .aurora {
-    position: fixed; top: -60px; left: 0; right: 0;
-    height: 200px; z-index: 2; pointer-events: none;
-    background: linear-gradient(180deg,
-      rgba(107,33,168,0.25) 0%,
-      rgba(147,51,234,0.1) 40%,
-      transparent 100%);
-    filter: blur(20px);
-    animation: auroraShift 8s ease-in-out infinite alternate;
+    position: fixed;
+    top: -90px;
+    left: -10%;
+    right: -10%;
+    height: 280px;
+    z-index: 2;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(255,55,0,.22), transparent 45%),
+      radial-gradient(ellipse at 70% 0%, rgba(255,175,0,.18), transparent 42%);
+    filter: blur(45px);
+    animation: auroraShift 7s ease-in-out infinite alternate;
   }
+
   @keyframes auroraShift {
-    from { opacity: 0.6; transform: scaleX(1); }
-    to   { opacity: 1;   transform: scaleX(1.05); }
+    from { opacity: .55; transform: translateX(-2%) scaleX(1); }
+    to   { opacity: 1; transform: translateX(2%) scaleX(1.06); }
   }
 
   /* ── LOGIN WRAPPER ── */
@@ -92,33 +119,51 @@
     to   { opacity: 1; transform: translateY(0) scale(1); }
   }
 
-  /* ── CARD ── */
+  /* =========================================================
+     NEOGLASS AGRESIVO — casi transparente / ultra blur
+     ========================================================= */
+
   .card {
-    background: rgba(255,255,255,0.065);
-    border: 1px solid rgba(255,255,255,0.13);
-    border-radius: 28px;
-    backdrop-filter: blur(36px);
-    -webkit-backdrop-filter: blur(36px);
+    background:
+      linear-gradient(135deg,
+        rgba(255,255,255,.095),
+        rgba(255,255,255,.028) 42%,
+        rgba(255,75,0,.035)
+      );
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 30px;
+    backdrop-filter: blur(42px) saturate(145%);
+    -webkit-backdrop-filter: blur(42px) saturate(145%);
     padding: 42px 38px 38px;
-    position: relative; overflow: hidden;
+    position: relative;
+    overflow: hidden;
     box-shadow:
-      0 40px 100px rgba(0,0,0,0.55),
-      0 0 0 0.5px rgba(255,255,255,0.07) inset,
-      0 0 60px rgba(107,33,168,0.1);
-  }
-  .card::before {
-    content: '';
-    position: absolute; top: 0; left: 15%; right: 15%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(200,150,255,0.5), transparent);
+      0 45px 120px rgba(0,0,0,.62),
+      0 0 0 1px rgba(255,255,255,.035) inset,
+      0 0 70px rgba(255,58,0,.09),
+      0 0 110px rgba(255,174,0,.035);
   }
 
-  /* Glow corner */
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      linear-gradient(125deg, rgba(255,255,255,.16), transparent 18% 72%, rgba(255,80,0,.08)),
+      radial-gradient(circle at 0% 100%, rgba(255,45,0,.12), transparent 35%);
+    opacity: .75;
+  }
+
   .card::after {
     content: '';
-    position: absolute; top: -40px; right: -40px;
-    width: 120px; height: 120px;
-    background: radial-gradient(circle, rgba(147,51,234,0.2) 0%, transparent 70%);
+    position: absolute;
+    width: 340px;
+    height: 340px;
+    top: -220px;
+    right: -180px;
+    background: radial-gradient(circle, rgba(255,92,0,.20), transparent 68%);
+    filter: blur(12px);
     pointer-events: none;
   }
 
@@ -133,14 +178,14 @@
     position: absolute;
     width: 90px; height: 90px;
     border-radius: 50%;
-    border: 1px solid rgba(151,71,255,0.2);
+    border: 1px solid rgba(255,95,0,.28);
     animation: ringPulse 3s ease-in-out infinite;
   }
   .logo-ring2 {
     position: absolute;
     width: 110px; height: 110px;
     border-radius: 50%;
-    border: 1px solid rgba(151,71,255,0.1);
+    border: 1px solid rgba(255,190,0,.16);
     animation: ringPulse 3s ease-in-out infinite 0.5s;
   }
   @keyframes ringPulse {
@@ -151,7 +196,7 @@
   .logo {
     width: 66px; height: 66px;
     border-radius: 18px;
-    background: linear-gradient(145deg, rgba(124,58,237,0.7), rgba(107,33,168,0.9));
+    background: linear-gradient(145deg, rgba(255,75,0,.72), rgba(255,150,0,.62));
     border: 1px solid rgba(255,255,255,0.18);
     display: flex; align-items: center; justify-content: center;
     font-size: 28px; font-weight: 700; color: #fff;
@@ -193,8 +238,10 @@
 
   .input-field input {
     width: 100%; height: 50px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,.045);
+    border: 1px solid rgba(255,255,255,.12);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     border-radius: 14px;
     padding: 0 16px 0 44px;
     font-size: 15px; color: #f2f2f7;
@@ -205,8 +252,8 @@
   .input-field input::placeholder { color: rgba(242,242,247,0.28); }
   .input-field input:focus {
     background: rgba(255,255,255,0.09);
-    border-color: rgba(151,71,255,0.55);
-    box-shadow: 0 0 0 3px rgba(107,33,168,0.22), 0 0 20px rgba(107,33,168,0.1);
+    border-color: rgba(255,105,0,.62);
+    box-shadow: 0 0 0 3px rgba(255,70,0,.14), 0 0 28px rgba(255,110,0,.14);
   }
 
   .input-icon {
@@ -275,14 +322,14 @@
   /* ── BTN PRINCIPAL ── */
   .btn-main {
     width: 100%; height: 52px;
-    background: linear-gradient(145deg, #7c3aed, #6b21a8);
+    background: linear-gradient(135deg, #ff2d00 0%, #ff6500 48%, #ffb000 100%);
     border: none; border-radius: 14px;
     font-size: 16px; font-weight: 600;
     color: #fff; font-family: inherit;
     cursor: pointer; letter-spacing: 0.01em;
     position: relative; overflow: hidden;
     transition: all 0.25s ease;
-    box-shadow: 0 8px 28px rgba(107,33,168,0.45);
+    box-shadow: 0 10px 35px rgba(255,55,0,.34), 0 0 35px rgba(255,145,0,.16);
     margin-bottom: 14px;
   }
   .btn-main::before {
@@ -304,7 +351,7 @@
   .btn-main:hover::after { left: 160%; }
   .btn-main:hover {
     transform: translateY(-1px);
-    box-shadow: 0 14px 36px rgba(107,33,168,0.6);
+    box-shadow: 0 16px 42px rgba(255,55,0,.46), 0 0 45px rgba(255,145,0,.18);
   }
   .btn-main:active { transform: scale(0.98); }
 
@@ -425,7 +472,7 @@
 
   /* ── SCROLLBAR ── */
   ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-thumb { background: rgba(151,71,255,0.3); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,85,0,.35); border-radius: 2px; }
 </style>
 </head>
 <body>
@@ -434,7 +481,6 @@
 <div class="bg"></div>
 <div class="bg2"></div>
 <div class="overlay"></div>
-<div class="grid-lines"></div>
 <div class="aurora"></div>
 <canvas id="particles"></canvas>
 
@@ -535,7 +581,7 @@
     vx:   (Math.random() - 0.5) * 0.3,
     vy:   (Math.random() - 0.5) * 0.3,
     alpha: Math.random() * 0.5 + 0.1,
-    color: Math.random() > 0.5 ? '151,71,255' : '200,150,255'
+    color: ['255,45,0','255,92,0','255,174,0','255,215,80'][Math.floor(Math.random()*4)]
   }));
 
   function drawParticles() {
